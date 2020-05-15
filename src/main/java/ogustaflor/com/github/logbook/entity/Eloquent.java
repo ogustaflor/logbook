@@ -1,5 +1,6 @@
 package ogustaflor.com.github.logbook.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,11 +20,13 @@ public abstract class Eloquent {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
+    @JsonIgnore
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
 
     public Date getCreatedAt() {

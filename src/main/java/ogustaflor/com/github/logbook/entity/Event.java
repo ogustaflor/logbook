@@ -1,75 +1,60 @@
 package ogustaflor.com.github.logbook.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "events")
 public class Event extends Eloquent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Getter
+    private Long id;
 
-    @Column(nullable = false)
+    @Column
+    @NotNull
+    @Getter
+    @Setter
     private String description;
 
-    @Column(nullable = false)
+    @Column
+    @NotNull
+    @Getter
+    @Setter
     private Date date;
 
-    @Column(nullable = false)
-    private long quantity;
+    @Column
+    @NotNull
+    @Getter
+    @Setter
+    private Integer quantity;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
+    @NotNull
+    @Getter
+    @Setter
     private String log;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Size(min = 4, max = 16)
+    @Getter
+    @Setter
+    private Level level;
+    private enum Level { INFO, WARNING, ERROR }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getLog() {
-        return log;
-    }
-
-    public void setLog(String value) {
-        this.log = log;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
-    }
+    @ManyToOne
+    @NotNull
+    @JsonIgnore
+    @Getter
+    @Setter
+    private Product product;
 
 }
