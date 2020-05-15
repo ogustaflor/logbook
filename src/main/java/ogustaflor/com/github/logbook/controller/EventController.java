@@ -1,7 +1,6 @@
 package ogustaflor.com.github.logbook.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import ogustaflor.com.github.logbook.entity.Event;
 
 import ogustaflor.com.github.logbook.service.EventService;
@@ -12,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class EventController {
 
     private final EventService eventService;
@@ -30,19 +27,13 @@ public class EventController {
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.POST)
-    ResponseEntity<Event> store(@Valid @RequestBody Event event) {
-        return new ResponseEntity<>(eventService.add(event), HttpStatus.OK);
+    ResponseEntity<Event> store(@Valid @RequestBody Event newEvent) {
+        return new ResponseEntity<>(eventService.add(newEvent), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
     ResponseEntity<Event> show(@PathVariable(value = "id") long id) {
-        Optional<Event> filteredEvent = eventService.findById(id);
-        if (filteredEvent.isPresent()) {
-            Event selectedEvent = filteredEvent.get();
-            return new ResponseEntity<>(selectedEvent, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(eventService.findById(id), HttpStatus.OK);
     }
 
 }
