@@ -3,6 +3,7 @@ package ogustaflor.com.github.logbook.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ogustaflor.com.github.logbook.annotation.Sortable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,24 +23,28 @@ public class Event extends Eloquent {
     @NotNull
     @Getter
     @Setter
+    @Sortable
     private String description;
 
     @Column
     @NotNull
     @Getter
     @Setter
+    @Sortable
     private Date date;
 
     @Column
     @NotNull
     @Getter
     @Setter
+    @Sortable
     private Integer quantity;
 
     @Column(columnDefinition = "TEXT")
     @NotNull
     @Getter
     @Setter
+    @Sortable
     private String log;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +52,7 @@ public class Event extends Eloquent {
     @Size(min = 4, max = 16)
     @Getter
     @Setter
+    @Sortable
     private Level level;
     private enum Level { INFO, WARNING, ERROR }
 
@@ -55,6 +61,7 @@ public class Event extends Eloquent {
     @JsonIgnore
     @Getter
     @Setter
+    @Sortable
     private Product product;
 
 }
