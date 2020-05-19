@@ -30,14 +30,17 @@ public class EventController {
         @RequestParam(name = "size", defaultValue = "8", required = false) int size,
         @RequestParam(name = "sortBy", defaultValue = "", required = false) String sortBy
     ) {
-        Set<String> sortableFields = Arrays.stream(Event.class.getDeclaredFields())
-            .filter(field -> field.isAnnotationPresent(Sortable.class))
-            .map(Field::getName)
-            .collect(Collectors.toSet());
-        String[] properties = (String[]) Arrays.stream(sortBy.split(";"))
-            .filter(sortableFields::contains)
-            .distinct()
-            .toArray();
+        String[] properties = {};
+        if (!sortBy.isEmpty()) {
+            Set<String> sortableFields = Arrays.stream(Event.class.getDeclaredFields())
+                .filter(field -> field.isAnnotationPresent(Sortable.class))
+                .map(Field::getName)
+                .collect(Collectors.toSet());
+            properties = (String[]) Arrays.stream(sortBy.split(";"))
+                .filter(sortableFields::contains)
+                .distinct()
+                .toArray();
+        }
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, properties));
         return new ResponseEntity<>(eventService.findAll(pageRequest), HttpStatus.OK);
     }
