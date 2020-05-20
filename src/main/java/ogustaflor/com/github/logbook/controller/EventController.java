@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,8 +27,10 @@ public class EventController {
     ResponseEntity<Page<Event>> index(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,
         @RequestParam(name = "size", defaultValue = "8", required = false) int size,
-        @RequestParam(name = "sortBy", defaultValue = "", required = false) String sortBy
+        @RequestParam(name = "sortBy", defaultValue = "", required = false) String sortBy,
+        @RequestParam(name = "ascendingSort", defaultValue = "true", required = false) boolean ascendingSort
     ) {
+        Sort.Direction direction = ascendingSort ? Sort.Direction.ASC : Sort.Direction.DESC;
         String[] properties = {};
         if (!sortBy.isEmpty()) {
             Set<String> sortableFields = Arrays.stream(Event.class.getDeclaredFields())
@@ -41,7 +42,7 @@ public class EventController {
                 .distinct()
                 .toArray();
         }
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, properties));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, properties));
         return new ResponseEntity<>(eventService.findAll(pageRequest), HttpStatus.OK);
     }
 
