@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ogustaflor.com.github.logbook.annotation.Sortable;
+import ogustaflor.com.github.logbook.enumeration.Level;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -54,7 +55,6 @@ public class Event extends Eloquent {
     @Setter
     @Sortable
     private Level level;
-    private enum Level { INFO, WARNING, ERROR }
 
     @ManyToOne
     @NotNull

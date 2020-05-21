@@ -37,9 +37,10 @@ public class EventController {
                 .filter(field -> field.isAnnotationPresent(Sortable.class))
                 .map(Field::getName)
                 .collect(Collectors.toSet());
-            properties = (String[]) Arrays.stream(sortBy.split(";"))
-                .filter(sortableFields::contains)
+            final String SEPARATOR = ";";
+            properties = (String[]) Arrays.stream(sortBy.split(SEPARATOR))
                 .distinct()
+                .filter(sortableFields::contains)
                 .toArray();
         }
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, properties));
