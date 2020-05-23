@@ -10,8 +10,4 @@ public class NotFoundException extends RuntimeException {
         super();
     }
 
-    public NotFoundException(String s) {
-        super(s);
-    }
-
 }

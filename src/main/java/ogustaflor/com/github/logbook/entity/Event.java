@@ -1,18 +1,20 @@
 package ogustaflor.com.github.logbook.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ogustaflor.com.github.logbook.annotation.Sortable;
-import ogustaflor.com.github.logbook.enumeration.Level;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 import java.util.Date;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Event extends Eloquent {
 
     @Id
@@ -22,6 +24,7 @@ public class Event extends Eloquent {
 
     @Column
     @NotNull
+    @NotBlank
     @Getter
     @Setter
     @Sortable
@@ -36,29 +39,33 @@ public class Event extends Eloquent {
 
     @Column
     @NotNull
+    @Positive
     @Getter
     @Setter
     @Sortable
-    private Integer quantity;
+    private Integer quantity = 1;
 
     @Column(columnDefinition = "TEXT")
     @NotNull
+    @NotBlank
     @Getter
     @Setter
     @Sortable
     private String log;
 
+    @Column(length = 16)
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Size(min = 4, max = 16)
     @Getter
     @Setter
     @Sortable
-    private Level level;
+    private Level level = Level.INFO;
+    private enum Level {
+        INFO, WARNING, ERROR
+    }
 
     @ManyToOne
     @NotNull
-    @JsonIgnore
     @Getter
     @Setter
     @Sortable

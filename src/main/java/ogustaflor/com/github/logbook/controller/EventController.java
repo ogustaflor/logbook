@@ -8,8 +8,6 @@ import ogustaflor.com.github.logbook.service.EventService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,13 +22,12 @@ public class EventController {
     private final EventService eventService;
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
-    ResponseEntity<Page<Event>> index(
+    Page<Event> index(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-        @RequestParam(name = "size", defaultValue = "8", required = false) int size,
+        @RequestParam(name = "size", defaultValue = "24", required = false) int size,
         @RequestParam(name = "sortBy", defaultValue = "", required = false) String sortBy,
         @RequestParam(name = "ascendingSort", defaultValue = "true", required = false) boolean ascendingSort
     ) {
-        Sort.Direction direction = ascendingSort ? Sort.Direction.ASC : Sort.Direction.DESC;
         String[] properties = {};
         if (!sortBy.isEmpty()) {
             Set<String> sortableFields = Arrays.stream(Event.class.getDeclaredFields())
@@ -38,23 +35,26 @@ public class EventController {
                 .map(Field::getName)
                 .collect(Collectors.toSet());
             final String SEPARATOR = ";";
-            properties = (String[]) Arrays.stream(sortBy.split(SEPARATOR))
+            properties = Arrays.stream(sortBy.split(SEPARATOR))
                 .distinct()
                 .filter(sortableFields::contains)
-                .toArray();
+                .toArray(String[]::new);
         }
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(direction, properties));
-        return new ResponseEntity<>(eventService.findAll(pageRequest), HttpStatus.OK);
+        PageRequest pageRequest = properties.length > 0
+            ? PageRequest.of(page, size, Sort.by(ascendingSort ? Sort.Direction.ASC : Sort.Direction.DESC, properties))
+            : PageRequest.of(page, size);
+
+        return eventService.findAll(pageRequest);
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.POST)
-    ResponseEntity<Event> store(@Valid @RequestBody Event newEvent) {
-        return new ResponseEntity<>(eventService.add(newEvent), HttpStatus.OK);
+    Event store(@Valid @RequestBody Event newEvent) {
+        return eventService.add(newEvent);
     }
 
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
-    ResponseEntity<Event> show(@PathVariable(value = "id") long id) {
-        return new ResponseEntity<>(eventService.findById(id), HttpStatus.OK);
+    Event show(@PathVariable(value = "id") long id) {
+        return eventService.findById(id);
     }
 
 }
