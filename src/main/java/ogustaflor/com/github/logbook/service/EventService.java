@@ -15,7 +15,7 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public Event add(Event newEvent) {
-        return eventRepository.save(newEvent);
+        return eventRepository.saveAndFlush(newEvent);
     }
 
     public Event findById(Long id) {

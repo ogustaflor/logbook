@@ -14,8 +14,8 @@ public class ProductController {
      private final ProductService productService;
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
-    Product store(@Valid @RequestBody Product newProduct) {
-        return productService.add(newProduct);
+    Product.DTO store(@Valid @RequestBody Product.DTO productDTO) {
+        return productService.add(productDTO.toEntity()).toDTO();
     }
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)

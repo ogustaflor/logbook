@@ -1,6 +1,5 @@
 package ogustaflor.com.github.logbook.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +19,7 @@ public class Event extends Eloquent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Setter
     private Long id;
 
     @Column
@@ -45,14 +45,6 @@ public class Event extends Eloquent {
     @Sortable
     private Integer quantity = 1;
 
-    @Column(columnDefinition = "TEXT")
-    @NotNull
-    @NotBlank
-    @Getter
-    @Setter
-    @Sortable
-    private String log;
-
     @Column(length = 16)
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -64,11 +56,44 @@ public class Event extends Eloquent {
         INFO, WARNING, ERROR
     }
 
+    @Column(columnDefinition = "TEXT")
+    @NotNull
+    @NotBlank
+    @Getter
+    @Setter
+    @Sortable
+    private String log;
+
     @ManyToOne
     @NotNull
     @Getter
     @Setter
     @Sortable
     private Product product;
+
+    public DTO toDTO() {
+        return new DTO(id, description, date, quantity, level, log, product.getId());
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class DTO {
+        private Long id;
+        private String description;
+        private Date date;
+        private Integer quantity;
+        private Level level;
+        private String log;
+        private Long productId;
+
+        public Event toEntity() {
+            Product product = new Product();
+            product.setId(productId);
+            return new Event(id, description, date, quantity, level, log, product);
+        }
+
+    }
 
 }

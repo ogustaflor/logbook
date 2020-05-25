@@ -13,7 +13,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public Product add(Product newProduct) {
-        return productRepository.save(newProduct);
+        return productRepository.saveAndFlush(newProduct);
     }
 
     public void remove(Product product) {

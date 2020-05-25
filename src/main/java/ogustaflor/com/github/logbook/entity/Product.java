@@ -9,9 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -22,6 +22,7 @@ public class Product extends Eloquent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Setter
     private Long id;
 
     @Column(unique = true, length = 128)
@@ -45,6 +46,26 @@ public class Product extends Eloquent {
 
     public void setPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
+    }
+
+    public DTO toDTO() {
+        return new DTO(id, name, password);
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class DTO {
+
+        private Long id;
+        private String name;
+        private String password;
+
+        public Product toEntity() {
+            return new Product(id, name, password, Collections.emptyList());
+        }
+
     }
 
 }
