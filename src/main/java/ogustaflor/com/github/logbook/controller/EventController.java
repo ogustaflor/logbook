@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import ogustaflor.com.github.logbook.annotation.Sortable;
 import ogustaflor.com.github.logbook.entity.Event;
 
+import ogustaflor.com.github.logbook.entity.dto.EventDTO;
 import ogustaflor.com.github.logbook.service.EventService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ public class EventController {
     private final EventService eventService;
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
-    Page<Event.DTO> index(
+    Page<EventDTO> index(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,
         @RequestParam(name = "size", defaultValue = "24", required = false) int size,
         @RequestParam(name = "sortBy", defaultValue = "", required = false) String sortBy,
@@ -48,12 +49,12 @@ public class EventController {
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.POST)
-    Event.DTO store(@Valid @RequestBody Event.DTO eventDTO) {
+    EventDTO store(@Valid @RequestBody EventDTO eventDTO) {
         return eventService.add(eventDTO.toEntity()).toDTO();
     }
 
     @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
-    Event.DTO show(@PathVariable(value = "id") long id) {
+    EventDTO show(@PathVariable(value = "id") long id) {
         return eventService.findById(id).toDTO();
     }
 

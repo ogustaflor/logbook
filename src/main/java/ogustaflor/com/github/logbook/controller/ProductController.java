@@ -2,6 +2,7 @@ package ogustaflor.com.github.logbook.controller;
 
 import lombok.RequiredArgsConstructor;
 import ogustaflor.com.github.logbook.entity.Product;
+import ogustaflor.com.github.logbook.entity.dto.ProductDTO;
 import ogustaflor.com.github.logbook.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class ProductController {
      private final ProductService productService;
 
     @RequestMapping(value = "/products", method = RequestMethod.POST)
-    Product.DTO store(@Valid @RequestBody Product.DTO productDTO) {
+    ProductDTO store(@Valid @RequestBody ProductDTO productDTO) {
         return productService.add(productDTO.toEntity()).toDTO();
     }
 

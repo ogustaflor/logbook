@@ -1,10 +1,12 @@
 package ogustaflor.com.github.logbook.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ogustaflor.com.github.logbook.entity.dto.ProductDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -48,24 +50,8 @@ public class Product extends Eloquent {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
-    public DTO toDTO() {
-        return new DTO(id, name, password);
-    }
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class DTO {
-
-        private Long id;
-        private String name;
-        private String password;
-
-        public Product toEntity() {
-            return new Product(id, name, password, Collections.emptyList());
-        }
-
+    public ProductDTO toDTO() {
+        return new ProductDTO(id, name, password);
     }
 
 }
