@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/events")
 public class EventController {
 
     private final EventService eventService;
 
-    @RequestMapping(value = "/events", method = RequestMethod.GET)
+    @GetMapping
     Page<EventDTO> index(
         @RequestParam(name = "page", defaultValue = "0", required = false) int page,
         @RequestParam(name = "size", defaultValue = "24", required = false) int size,
@@ -48,12 +49,12 @@ public class EventController {
         return eventService.findAll(pageRequest).map(Event::toDTO);
     }
 
-    @RequestMapping(value = "/events", method = RequestMethod.POST)
+    @PostMapping
     EventDTO store(@Valid @RequestBody EventDTO eventDTO) {
         return eventService.add(eventDTO.toEntity()).toDTO();
     }
 
-    @RequestMapping(value = "/events/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     EventDTO show(@PathVariable(value = "id") long id) {
         return eventService.findById(id).toDTO();
     }
